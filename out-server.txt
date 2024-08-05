@@ -1,0 +1,15 @@
+sc43@vat:~/final-Q2/lxx789-final-Q2$ ./server 8080 credentials1-sha256.txt 
+
+Server listening on port 8080
+
+Received username hash: c71e9769622ebb105debb875d6929bbc234bf53fa94e490a280e2538963c751f
+
+Comparing username hash with credential: 5ade5a87aaa573760ad147c8d238fb360eda33ab818f62359bb15946e7f1229a
+
+Comparing username hash with credential: 4c15555511cdadd9418cc91fe91b6409dabcd9e9bba2313601cd955ebf321ae0
+
+Comparing username hash with credential: ea68415238fab6f7167d9e7ffaaed64caab10de9edfbb5bc26008f3d1d78c25e
+
+Comparing username hash with credential: 1b8113edac75ef3e567f111e82690c0d3f36a366bb0d441223b7882309615995
+
+Comparing username hash with credential: c71e9769622ebb105debb875d6929bbc234bf53fa94e490a280e2538963c751f

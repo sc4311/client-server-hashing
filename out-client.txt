@@ -1,0 +1,13 @@
+sc43@vat:~/final-Q2/lxx789-final-Q2$ ./client 127.0.0.1 8080
+
+Enter option (1: check username/email, 2: check password, 3: check both, 4: exit): 1
+
+Enter username/email: user2@123.com
+
+Username/email hash: c71e9769622ebb105debb875d6929bbc234bf53fa94e490a280e2538963c751f
+
+Server response: Found
+
+Response time: 0.000008 seconds
+
+Enter option (1: check username/email, 2: check password, 3: check both, 4: exit): 4
