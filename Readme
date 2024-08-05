@@ -1,8 +1,74 @@
-# Client-Server Hashing Project
-
-## Overview
-
+Client-Server Hashing Project
+Overview
 This project implements a client-server application in C to verify if a username/email or password appears in a list of breached credentials. The server stores the SHA-256 hash values of breached credentials and responds to queries from clients who wish to check their credentials.
 
-## Directory Structure
+Directory Structure
+final-Q2/
+│
+├── client.c
+├── server.c
+├── sha256_lib.c
+├── sha256_lib.h
+├── Makefile
+├── credentials0-plain.txt
+├── credentials0-sha256.txt
+├── credentials1-sha256.txt
+├── out-client.txt
+└── out-server.txt
 
+Usage
+Start the Server:
+
+In one terminal, start the server with the port number and the credentials file:
+./server <port_number> <credentials_file>
+Example:
+./server 8080 credentials1-sha256.txt
+
+
+Run the Client:
+In another terminal, run the client with the server's hostname and port number:
+./client <hostname> <port_number>
+Example:
+./client <hostname> 8080
+
+Client Options:
+
+The client will prompt for an option:
+
+1: Check username/email
+2: Check password
+3: Check both username/email and password
+4: Exit
+Depending on the chosen option, the client will request the necessary input, compute the SHA-256 hash, and send it to the server for verification.
+
+Example Output
+Client:
+$ ./client <hostname> 8080
+Enter option (1: check username/email, 2: check password, 3: check both, 4: exit): 1
+Enter username/email: user1@abc.com
+Username/email hash: ea68415238fab6f7167d9e7ffaaed64caab10de9edfbb5bc26008f3d1d78c25e
+Server response: Found
+Response time: 0.000004 seconds
+
+Enter option (1: check username/email, 2: check password, 3: check both, 4: exit): 4
+
+Server:
+$ ./server 8080 credentials0-sha256.txt
+Server listening on port 8080
+
+Received username hash: ea68415238fab6f7167d9e7ffaaed64caab10de9edfbb5bc26008f3d1d78c25e
+Comparing username hash with credential: ea68415238fab6f7167d9e7ffaaed64caab10de9edfbb5bc26008f3d1d78c25e
+
+Implementation Details
+Client
+Connects to the server using TCP.
+Prompts the user for an option to check username/email, password, or both.
+Computes the SHA-256 hash of the input credentials.
+Sends the hash to the server and waits for the response.
+Displays the server's response and the response time.
+Server
+Loads SHA-256 hash values of breached credentials from a file.
+Listens for client connections on the specified port.
+Processes client requests to verify hash values against the stored credentials.
+Sends appropriate responses to the client.
+Handles graceful shutdown on receiving SIGINT.
