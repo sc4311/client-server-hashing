@@ -13,7 +13,6 @@ client-server-hashing/
 ├── Makefile
 ├── credentials0-plain.txt
 ├── credentials0-sha256.txt
-├── credentials1-sha256.txt
 ├── out-client.txt
 └── out-server.txt
 ```
