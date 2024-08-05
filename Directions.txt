@@ -1,0 +1,86 @@
+It contains the following three sub-directories and some input files! Please read the Readme files in each directory for more details.
+
+tcp-sample-capitalize-str contains the sample TCP client.c and server.c programs that we discussed in class. Before getting into the details of this mini project, you need to first compile/run these simple client.c and server.c programs as is by following the instruction in Readme file there. After you try them and gain more practical experience with client-server programing paradigm, you will modify the copies of these client.c and server.c programs under the following directory.
+
+abc123-final-Q2 (please re-name this directory such that abc123 will be your abc123) will include your implementation of server.c and client.c for this mini project, as described below!
+
+use_sha256_lib contains a simple implementation of SHA256 as a library and demonstrates how to use it in a simple driver program.  You will need this sample driver to see how to compute SHA256 in your client.c, as described below.
+
+.txt files are input files described below
+
+You will only modify server.c and client.c in abc123-final-Q2 directory and finally will zip and submit it! So, please do all your work under this directory! (Again, please re-name this directory such that abc123 will be your abc123)
+
+Objective
+
+The objective of this mini assignment/project is to familiarize students with Client-Server Paradigm and Socket Programming in C while utilizing one of the cybersecurity projects from a collaborative NSF SaTC-EDU grant, which integrates key cybersecurity concepts into various traditional CS courses.  In this project, you will implement client.c and server.c while also learning about user identity access management (UIAM) and privacy preservation using  hashing. More details will be given below, but the basic idea is to maintain a list of breached usernames/e-mails and passwords at server.c, and let it respond to the users who  would like to check if their username (e-mail) and/or password appears among the breached usernames/emails and passwords using client.c. However, storing such information or querying it using clear/plain text will not be practical or secure, as discussed below!
+
+Suppose we have a text file (say credentials0-plain.txt) containing several breached usernames/emails and passwords, separated by ':' as shown below:
+
+admin@xyz.com:password
+user1@abc.com:qwerty
+user2@123.com:q1w2e3r4t5
+user3@qwe.edu:123456
+
+These are not actual emails/usernames or passwords. But there are several such real data sets containing actually breached username/email and password information. Since people tend to reuse the same password in many places, it can be dangerous for anyone to continue to use such breached email/password (WHY?). Hackers may well have access to these passwords and test them against important websites such as bank accounts. Therefore, it will be prudent if a user is provided with a web service that they can use to verify that their new password does NOT appear in such breached data sets and files before they decide to adopt it.
+
+If you had such an actual file containing clear text of breached usernames/emails and passwords, you could simply implement a server.c program that can search the  queried e-mail and password in that file. However, this will not be a good practice (WHY?). Firstly, this clear text file can be hacked and hackers may test them against other websites such as bank accounts, causing further hacks and violation of privacy. Secondly, if you want to contact that web server to verify that your email and password do not appear in the breached file, you should not send them as plain text over network either, right? Anyone who cares to pause to think about this for a second will realize that nobody will use the provided service once they realize that their password will be sent, in plain text, to a remote server that they cannot trust.
+
+Therefore, instead of directly storing or querying the email and password as plain text; we will compute the cryptographic SHA-256 hash value (64 characters) for each username/e-mail and password. Accordingly, our input file (say credentials0-sha256.txt) will have the following format, where each line contains the SHA-256 hash values of the breached usernames/e-mails and passwords  (64-charcters for each separated by ':'):
+
+5ade5a87aaa573760ad147c8d238fb360eda33ab818f62359bb15946e7f1229a:5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+ea68415238fab6f7167d9e7ffaaed64caab10de9edfbb5bc26008f3d1d78c25e:65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5
+c71e9769622ebb105debb875d6929bbc234bf53fa94e490a280e2538963c751f:23b5ed29a1e8409f70644e44faebae79ae687318efd719d9af29f8496b016a81
+3764d682f662dc18c3061ac1ea835fdf4e855f5513dedfcab2c89a32549bf636:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
+
+Similarly, when checking a username/e-mail and/or password against the breached ones, the user/client.c will just send the hash values of the usernames/e-mails and passwords that they would like to query. Clearly, the use of hashing will not only work but also be essential for users to feel comfortable in preserving their privacy when using such a web service!
+
+WHAT YOU NEED TO DO?
+
+YOU WILL MODIFY client.c and server.c under abc123-final-Q2.
+
+Note: These and Makefile have already been copied from tcp-sample-capitilize-str directory into abc123-final-Q2.
+
+The interactions between the client and server will be described at a very high-level below! So, you to define the details of your application protocol (i.e., request and reply message structures for your client and server, respectively; in which order to exchange them, and what to do when you send/receive certain messages etc).
+
+client.c
+
+> client server-hostname(fox01) port-number
+
+As in the sample TCP example, the client will take server-hostname and port-number as command line arguments, and connect to the server. Then it will ask the user to enter an option (e.g., 1: to check username/email, 2: check password,  3: check both username/email and password, 4: exit) in a loop.  Depending on the given option, it will get a username/email and/or password in plain text from the user. But it will not sent these to the server in plain text! Instead, it will computer their SHA256 hash values and then send that hash value information to the server, and wait for the reply from the server. Upon receiving it print the reply along with how long it took to get a response! When the user selects option 4, send a message to the server for stopping the connection and quit!
+
+For computing SHA256 hash value for a username or password, you can simply use the provided implementation of sha256 lib (sha256_lib.c and sha256_lib.h), Please  check use_sha256-lib directory to see how we use sha256 lib in a simple sha256_driver.c program. Then you can similarly  compute sha256 in your client.c without modifying anything in sha256 lib).
+
+server.c
+
+> server port-number ../credentials0-sha256.txt
+
+As in the sample example, it will take a port-number as command line argument and open a TCP socket on the given port-number to welcome clients to connect to it. But, before opening welcome socket, it will also take the name of the file containing SHA256 hash values of the breached usernames/e-mails and passwords as a command line argument and load these hash values into a data structure of your choice, in memory. For a simple implementation, you can use an array and use a linear search (and just this is enough for this mini project)!  Note: .../credentials0-sha256.txt is a very short file for quick tests and we also provide its plain-text version. But, we will also give you very large file .../credentials1-sha256.txt containing 10^6 entries of hash values for e-mail and password!
+
+After accepting a connection, the server will wait for the client to send a request with hash values of a username/email, password, or both (you need to specify packet formats and actions for each options). Accordingly, the server searches the given hash values in the data structure and generate an appropriate reply to indicate if the queried information is in the breached data set or not without knowing the plain text version of it! The server will continue to interact with the current client until the client sends a message to stop/end connection. Then the server closes the connection socket and  goes back to the welcome socket for another client!
+
+Clearly, this server is a very simple one and needs a lot of improvements. Given the limited time,  you are not expected to work on such improvements (except the third one below), but we like to still list some  of them so that you may consider them later to improve you programming skills and develop more realistic client-server programs:
+
+1. (OPTINAL) Serving one client at a time is not enough in practice because other clients cannot get any service until the current client is done. To get around this problem, you may create a new process using fork() and letting the child process interact with the client while the parent process goes back and waits for another client! But creating another process is expensive and specifically in this case, since the credentials file in memory is large, you will be creating unnecessary copies of that file in the memory. Instead, using multi threads (one to accept connection requests and the others to serve each client) would be a better solutions as they can share the same file in memory!
+
+2. (OPTINAL) The simple array storage and linear search you are expected to implement will be fine for this mini project. But, when the file size is large, storing them in an array and using the linear search might be too slow! So, to speed up the search, you may need to consider other data structures  (e.g, using hash tables, dictionary)! Another problem here is the memory usage! Storing too many entries, which might not be queried at all, will unnecessarily occupy the memory! You may consider how to re-organize them and store them in multiple files while improving the access time when they are queried!
+
+3. (REQUIRED) When you are testing your server.c, you will need to kill it (Ctrl-C) and re-start it again. When you kill a process, dynamically allocated resources might be given back to the system but some resource like port-numbers might not be available for a while to use again. So if you kill a server and try to re-start it on the same port, the bind() may fail! Do this in the sample and see what happen! Then you need to pick another port number or wait for a while to re-use it! A better approach would be to implement a function to handle SIGINT signal. When the server catches SIGINT signal, it can call your handler functions which should close all open port numbers and files and  then exit! This way you can re-use the same port number again without waiting. Since this will be a useful feature you are required to include this feature in your server.c.
+
+Notes:
+
+Include comments and extra printf statements to print what messages are sent/received at the server/client so that we can easily follow your protocol.
+Make sure you close the socket descriptors that are not needed in the server and child processes .
+You don't need to handle every possible error, but make sure you check what each system call returns and take minimum action (e.g., simply quit if there is an error which is not EINTR)
+WHAT TO Submit:
+
+Put all your work under a directory called abc123-final-Q2.
+
+As in the provided abc123-final-Q2, make sure you have your source codes as server.c, client.c, Makefile. Also keep sha256_lib.c and sha256_lib.h in that directory. You need to compile and test them on our fox0X. Run your server and client in two different windows/terminals and test different options. Then simply copy/paste the outputs of your client and server programs into out-client.txt and out-server.txt for at least 1 query for each option!
+
+Then
+
+Remove executables and other binaries using make clean
+Just have the abovementioned files containing source codes, Makefile and output files .txt
+Zip your abc123-final-Q2 directory/folder using -r flag
+Make sure your abc123-final.zip contains the above files .c .txt Makefile
+Submit it here (through Canvas).
