@@ -1,5 +1,8 @@
+# Client-Server Hashing Project
 
-This directory contains the basic server.c and client.c as presented in class!
-You will be mainly modifying these two programs, as described on Canvas!
+## Overview
 
-Please follow the instructions
+This project implements a client-server application in C to verify if a username/email or password appears in a list of breached credentials. The server stores the SHA-256 hash values of breached credentials and responds to queries from clients who wish to check their credentials.
+
+## Directory Structure
+
