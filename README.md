@@ -4,6 +4,7 @@
 This project implements a client-server application in C to verify if a username/email or password appears in a list of breached credentials using SHA-256 hashing for privacy preservation.
 
 ## Directory Structure
+```plaintext
 client-server-hashing/
 ├── client.c
 ├── server.c
@@ -15,6 +16,7 @@ client-server-hashing/
 ├── credentials1-sha256.txt
 ├── out-client.txt
 └── out-server.txt
+```
 
 ## Usage
 
