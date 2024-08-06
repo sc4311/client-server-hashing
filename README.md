@@ -42,20 +42,22 @@ client-server-hashing/
 ## Example Interaction
 
 **Client**:
+```plaintext
 $ ./client localhost 8080
 Enter option (1: check username/email, 2: check password, 3: check both, 4: exit): 1
 Enter username/email: user1@abc.com
 Username/email hash: ea68415238fab6f7167d9e7ffaaed64caab10de9edfbb5bc26008f3d1d78c25e
 Server response: Found
 Response time: 0.000004 seconds
-
+```
 
 **Server**:
+```plaintext
 $ ./server 8080 credentials0-sha256.txt
 Server listening on port 8080
 Received username hash: ea68415238fab6f7167d9e7ffaaed64caab10de9edfbb5bc26008f3d1d78c25e
 Comparing username hash with credential: ea68415238fab6f7167d9e7ffaaed64caab10de9edfbb5bc26008f3d1d78c25e
-
+```
 
 ## Implementation Details
 
